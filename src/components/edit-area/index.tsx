@@ -1,24 +1,37 @@
-import React from 'react'
+import React, { MouseEventHandler, useState } from 'react'
 import { Component, useComponetsStore } from '../../stores/components'
 import { useComponentConfigStore } from '../../stores/component-config'
+import HoverMask from '../hover-mask'
 
 export default function EditArea() {
+  const [hoverComponentId, setHoverComponentId] = useState<number>()
+
   const { components } = useComponetsStore()
   const { componentConfig } = useComponentConfigStore()
 
-  console.log(components);
-  
+  const handleMouseOver: MouseEventHandler = (e) => {
+    const path = e.nativeEvent.composedPath()
+
+    for (let i = 0; i < path.length; i += 1) {
+      const ele = path[i] as HTMLElement
+
+      const componentId = ele.dataset?.componentId
+      // 第一个有 componentId 的元素则是被 hover 的组件
+      if (componentId) {
+        setHoverComponentId(+componentId)
+        return
+      }
+    }
+  }
 
   const renderComponents = (components: Component[]): React.ReactNode =>
     components.map((component) => {
       const config = componentConfig?.[component.name]
-      
+
       if (!config?.component) {
         return null
       }
-      
-      console.log(component);
-      
+
       return React.createElement(
         config.component,
         {
@@ -32,9 +45,17 @@ export default function EditArea() {
     })
 
   return (
-    <div className="h-[100%]">
-      {/* <pre>{JSON.stringify(components, null, 2)}</pre> */}
+    <div
+      className="h-[100%] lc-edit-area"
+      onMouseOver={handleMouseOver}
+      onMouseLeave={() => {
+        setHoverComponentId(undefined)
+      }}
+    >
       {renderComponents(components)}
+      {hoverComponentId && <HoverMask portalWrapperClassName="lc-portal-wrapper" containerClassName="lc-edit-area" componentId={hoverComponentId} />}
+      {/* 用于挂载 HoverMask 的容器 */}
+      <div className="lc-portal-wrapper" />
     </div>
   )
 }

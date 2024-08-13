@@ -6,8 +6,6 @@ export default function Material() {
   const { componentConfig } = useComponentConfigStore()
 
   const components = useMemo(() => {
-    console.log(111)
-
     return Object.values(componentConfig)
   }, [componentConfig])
 
