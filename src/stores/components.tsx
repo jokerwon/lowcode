@@ -1,4 +1,6 @@
+import { CSSProperties } from 'react'
 import { create } from 'zustand'
+import { Component } from '../inteface'
 
 const initialComponents = [
   {
@@ -8,36 +10,27 @@ const initialComponents = [
     desc: '页面',
     children: [
       {
-        id: 1723620158619,
+        id: 2,
         name: 'Container',
         props: {},
         desc: '容器',
         parentId: 1,
         children: [
           {
-            id: 1723620160414,
+            id: 3,
             name: 'Button',
             desc: '按钮',
             props: {
               type: 'primary',
               text: '按钮',
             },
-            parentId: 1723620158619,
+            parentId: 2,
           },
         ],
       },
     ],
   },
 ]
-
-export interface Component {
-  id: number
-  name: string
-  props: any
-  children?: Component[]
-  parentId?: number
-  desc?: string
-}
 
 interface State {
   currentComponentId: number | null
@@ -50,19 +43,12 @@ interface Action {
   deleteComponent: (componentId: number) => void
   updateComponentProps: (componentId: number, props: any) => void
   setCurComponentId: (componentId: number | null) => void
+  updateComponentStyles: (componentId: number, styles: CSSProperties) => void
 }
 
 export const useComponetsStore = create<State & Action>((set, get) => ({
   currentComponentId: null,
   currentComponent: null,
-  // components: [
-  //   {
-  //     id: 1,
-  //     name: 'Page',
-  //     props: {},
-  //     desc: '页面',
-  //   },
-  // ],
   components: initialComponents,
 
   addComponent: (component, parentId) =>
@@ -113,6 +99,15 @@ export const useComponetsStore = create<State & Action>((set, get) => ({
       currentComponentId: componentId,
       currentComponent: getComponentById(componentId, state.components),
     })),
+  updateComponentStyles: (componentId, styles) =>
+    set((state) => {
+      const component = getComponentById(componentId, state.components)
+      if (component) {
+        component.styles = { ...(component.styles || {}), ...styles }
+        return { components: [...state.components] }
+      }
+      return { components: [...state.components] }
+    }),
 }))
 
 export function getComponentById(id: number | null, components: Component[]): Component | null {

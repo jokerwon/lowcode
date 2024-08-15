@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
 import { ConfigProvider, Form, Input, Select } from 'antd'
 import { useComponetsStore } from '../../stores/components'
-import { ComponentConfig, ComponentSetter, useComponentConfigStore } from '../../stores/component-config'
-import { useEffect } from 'react'
+import { useComponentConfigStore } from '../../stores/component-config'
+import { ComponentConfig, ComponentSetter } from '../../inteface'
 
 export default function Attribute() {
   const [form] = Form.useForm()
@@ -58,7 +59,7 @@ export default function Attribute() {
         <Form.Item label="描述">
           <Input value={desc} readOnly />
         </Form.Item>
-        {componentConfig[currentComponent.name]?.setter?.map((setter) => (
+        {componentConfig[currentComponent.name]?.setter?.attribute?.map((setter) => (
           <Form.Item label={setter.label} name={setter.name} key={setter.name}>
             {renderFormItem(setter)}
           </Form.Item>

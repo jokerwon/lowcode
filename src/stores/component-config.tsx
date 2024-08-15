@@ -1,55 +1,32 @@
 import { create } from 'zustand'
+import { ComponentConfig } from '../inteface'
+import Page from '../materials/page'
 import Container from '../materials/container'
 import Button from '../materials/button'
-import Page from '../materials/page'
 
-export interface ComponentSetter {
-  name: string
-  label: string
-  placeholder?: string
-  type: 'input' | 'select'
-  [key: string]: any
-}
-
-export interface ComponentConfig {
-  name: string
-  defaultProps: Record<string, any>
-  desc?: string
-  setter?: ComponentSetter[]
-  component: any
-}
-
-interface State {
-  componentConfig: { [key: string]: ComponentConfig }
-}
-
-interface Action {
-  registerComponent: (name: string, componentConfig: ComponentConfig) => void
-}
-
-export const useComponentConfigStore = create<State & Action>((set) => ({
-  componentConfig: {
-    Page: {
-      name: 'Page',
-      defaultProps: {},
-      component: Page,
-      desc: '页面'
+const initialComponentConfig = {
+  Page: {
+    name: 'Page',
+    defaultProps: {},
+    component: Page,
+    desc: '页面',
+  },
+  Container: {
+    name: 'Container',
+    defaultProps: {},
+    component: Container,
+    desc: '容器',
+  },
+  Button: {
+    name: 'Button',
+    desc: '按钮',
+    defaultProps: {
+      type: 'primary',
+      text: '按钮',
     },
-    Container: {
-      name: 'Container',
-      defaultProps: {},
-      component: Container,
-      desc: '容器',
-    },
-    Button: {
-      name: 'Button',
-      desc: '按钮',
-      defaultProps: {
-        type: 'primary',
-        text: '按钮',
-      },
-      component: Button,
-      setter: [
+    component: Button,
+    setter: {
+      attribute: [
         {
           name: 'type',
           label: '按钮类型',
@@ -67,6 +44,18 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
       ],
     },
   },
+}
+
+interface State {
+  componentConfig: { [key: string]: ComponentConfig }
+}
+
+interface Action {
+  registerComponent: (name: string, componentConfig: ComponentConfig) => void
+}
+
+export const useComponentConfigStore = create<State & Action>((set) => ({
+  componentConfig: initialComponentConfig,
   registerComponent: (name, componentConfig) =>
     set((state) => {
       return {

@@ -1,15 +1,10 @@
 import { useState } from 'react'
 import { Empty, Segmented } from 'antd'
 import { useComponetsStore } from '../../stores/components'
+import { SettingType } from '../../inteface'
 import Attribute from './Attribute'
 import Style from './Style'
 import Event from './Event'
-
-enum SettingType {
-  ATTRIBUTE = 'attribute',
-  STYLE = 'style',
-  EVENT = 'event',
-}
 
 export default function Setting() {
   const { currentComponentId } = useComponetsStore()
