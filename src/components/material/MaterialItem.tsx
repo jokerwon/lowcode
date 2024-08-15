@@ -2,14 +2,15 @@ import { useDrag } from 'react-dnd'
 
 export interface MaterialItemProps {
   name: string
+  desc: string
 }
 
 export function MaterialItem(props: MaterialItemProps) {
-  const { name } = props
+  const { name, desc } = props
 
   const [, drag] = useDrag({
     type: name,
-    item: { type: name }, // 传递的数据
+    item: { type: name, desc }, // 传递的数据
   })
 
   return (
@@ -27,7 +28,7 @@ export function MaterialItem(props: MaterialItemProps) {
         hover:bg-[#ccc]
       "
     >
-      {name}
+      {desc || name}
     </div>
   )
 }

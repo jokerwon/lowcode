@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { getComponentById, useComponetsStore } from '../../stores/components'
+import { Dropdown, Popconfirm, Space } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 
-interface HoverMaskProps {
+interface SelectedMaskProps {
   portalWrapperClassName: string
   containerClassName: string
   componentId: number
 }
 
-function HoverMask({ portalWrapperClassName, containerClassName, componentId }: HoverMaskProps) {
+function SelectedMask({ containerClassName, portalWrapperClassName, componentId }: SelectedMaskProps) {
   const [position, setPosition] = useState({
     left: 0,
     top: 0,
@@ -18,7 +20,7 @@ function HoverMask({ portalWrapperClassName, containerClassName, componentId }: 
     labelLeft: 0,
   })
 
-  const { components } = useComponetsStore()
+  const { components, currentComponentId, deleteComponent, setCurComponentId } = useComponetsStore()
 
   useEffect(() => {
     updatePosition()
@@ -63,6 +65,34 @@ function HoverMask({ portalWrapperClassName, containerClassName, componentId }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componentId])
 
+  const parentComponents = useMemo(() => {
+    const parents = []
+    let cur = curComponent
+
+    while (cur?.parentId) {
+      cur = getComponentById(cur.parentId, components)!
+      parents.push(cur)
+    }
+
+    return parents
+  }, [curComponent, components])
+
+  function handleDelete() {
+    deleteComponent(componentId)
+    setCurComponentId(null)
+  }
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      updatePosition()
+    }
+    window.addEventListener('resize', resizeHandler)
+    return () => {
+      window.removeEventListener('resize', resizeHandler)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return createPortal(
     <>
       <div
@@ -70,7 +100,7 @@ function HoverMask({ portalWrapperClassName, containerClassName, componentId }: 
           position: 'absolute',
           left: position.left,
           top: position.top,
-          backgroundColor: 'rgba(0, 0, 255, 0.05)',
+          backgroundColor: 'rgba(0, 0, 255, 0.1)',
           border: '1px dashed blue',
           pointerEvents: 'none',
           width: position.width,
@@ -91,22 +121,45 @@ function HoverMask({ portalWrapperClassName, containerClassName, componentId }: 
           transform: 'translate(-100%, -100%)',
         }}
       >
-        <div
-          style={{
-            padding: '0 8px',
-            backgroundColor: 'blue',
-            borderRadius: 4,
-            color: '#fff',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {curComponent?.desc || curComponent?.name}
-        </div>
+        <Space>
+          <Dropdown
+            menu={{
+              items: parentComponents.map((item) => ({
+                key: item.id,
+                label: item.name,
+              })),
+              onClick: ({ key }) => {
+                setCurComponentId(+key)
+              },
+            }}
+            disabled={parentComponents.length === 0}
+          >
+            <div
+              style={{
+                padding: '0 8px',
+                backgroundColor: 'blue',
+                borderRadius: 4,
+                color: '#fff',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {curComponent?.desc || curComponent?.name}
+            </div>
+          </Dropdown>
+          {/* Page 组件不展示删除按钮 */}
+          {currentComponentId !== 1 && (
+            <div style={{ padding: '0 8px', backgroundColor: 'blue' }}>
+              <Popconfirm title="确认删除？" okText={'确认'} cancelText={'取消'} onConfirm={handleDelete}>
+                <DeleteOutlined style={{ color: '#fff' }} />
+              </Popconfirm>
+            </div>
+          )}
+        </Space>
       </div>
     </>,
     el
   )
 }
 
-export default HoverMask
+export default SelectedMask

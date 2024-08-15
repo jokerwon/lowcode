@@ -8,7 +8,7 @@ export function useMaterailDrop(accept: string[], id: number) {
 
   const [{ canDrop }, drop] = useDrop(() => ({
     accept,
-    drop: (item: { type: string }, monitor) => {
+    drop: (item: { type: string, desc: string }, monitor) => {
       if (monitor.didDrop()) {
         // 子组件处理过则跳过
         return
@@ -20,6 +20,7 @@ export function useMaterailDrop(accept: string[], id: number) {
         {
           id: new Date().getTime(),
           name: item.type,
+          desc: item.desc,
           props,
         },
         id

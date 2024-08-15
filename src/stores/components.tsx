@@ -1,5 +1,33 @@
 import { create } from 'zustand'
 
+const initialComponents = [
+  {
+    id: 1,
+    name: 'Page',
+    props: {},
+    desc: '页面',
+    children: [
+      {
+        id: 1723620158619,
+        name: 'Container',
+        props: {},
+        parentId: 1,
+        children: [
+          {
+            id: 1723620160414,
+            name: 'Button',
+            props: {
+              type: 'primary',
+              text: '按钮',
+            },
+            parentId: 1723620158619,
+          },
+        ],
+      },
+    ],
+  },
+]
+
 export interface Component {
   id: number
   name: string
@@ -10,6 +38,8 @@ export interface Component {
 }
 
 interface State {
+  currentComponentId: number | null
+  currentComponent: Component | null
   components: Component[]
 }
 
@@ -17,17 +47,22 @@ interface Action {
   addComponent: (component: Component, parentId?: number) => void
   deleteComponent: (componentId: number) => void
   updateComponentProps: (componentId: number, props: any) => void
+  setCurComponentId: (componentId: number | null) => void
 }
 
 export const useComponetsStore = create<State & Action>((set, get) => ({
-  components: [
-    {
-      id: 1,
-      name: 'Page',
-      props: {},
-      desc: '页面',
-    },
-  ],
+  currentComponentId: null,
+  currentComponent: null,
+  // components: [
+  //   {
+  //     id: 1,
+  //     name: 'Page',
+  //     props: {},
+  //     desc: '页面',
+  //   },
+  // ],
+  components: initialComponents,
+
   addComponent: (component, parentId) =>
     set((state) => {
       if (parentId) {
@@ -71,6 +106,11 @@ export const useComponetsStore = create<State & Action>((set, get) => ({
 
       return { components: [...state.components] }
     }),
+  setCurComponentId: (componentId) =>
+    set((state) => ({
+      currentComponentId: componentId,
+      currentComponent: getComponentById(componentId, state.components),
+    })),
 }))
 
 export function getComponentById(id: number | null, components: Component[]): Component | null {
