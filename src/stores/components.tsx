@@ -11,11 +11,13 @@ const initialComponents = [
         id: 1723620158619,
         name: 'Container',
         props: {},
+        desc: '容器',
         parentId: 1,
         children: [
           {
             id: 1723620160414,
             name: 'Button',
+            desc: '按钮',
             props: {
               type: 'primary',
               text: '按钮',

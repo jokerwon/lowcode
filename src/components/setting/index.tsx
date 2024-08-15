@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { Empty, Segmented } from 'antd'
 import { useComponetsStore } from '../../stores/components'
-import { Segmented } from 'antd'
+import Attribute from './Attribute'
+import Style from './Style'
+import Event from './Event'
 
 enum SettingType {
   ATTRIBUTE = 'attribute',
@@ -9,13 +12,27 @@ enum SettingType {
 }
 
 export default function Setting() {
-  const { components } = useComponetsStore()
+  const { currentComponentId } = useComponetsStore()
   const [type, setType] = useState(SettingType.ATTRIBUTE)
 
-  // if (!currentComponentId) return null
+  const render = () => {
+    if (!currentComponentId) {
+      return <Empty className='mt-16' description="请选中一个组件" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+    }
+    switch (type) {
+      case SettingType.ATTRIBUTE:
+        return <Attribute />
+      case SettingType.STYLE:
+        return <Style />
+      case SettingType.EVENT:
+        return <Event />
+      default:
+        return null
+    }
+  }
 
   return (
-    <div>
+    <div className="p-2">
       <Segmented
         block
         value={type}
@@ -26,7 +43,7 @@ export default function Setting() {
           { label: '事件', value: SettingType.EVENT },
         ]}
       />
-      <pre>{JSON.stringify(components, null, 2)}</pre>
+      {render()}
     </div>
   )
 }

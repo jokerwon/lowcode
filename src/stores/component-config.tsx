@@ -6,7 +6,8 @@ import Page from '../materials/page'
 export interface ComponentSetter {
   name: string
   label: string
-  type: string
+  placeholder?: string
+  type: 'input' | 'select'
   [key: string]: any
 }
 
