@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Empty, Segmented } from 'antd'
+import { ConfigProvider, Empty, Segmented } from 'antd'
 import { useComponetsStore } from '../../stores/components'
 import { SettingType } from '../../inteface'
 import Attribute from './Attribute'
@@ -12,7 +12,7 @@ export default function Setting() {
 
   const render = () => {
     if (!currentComponentId) {
-      return <Empty className='mt-16' description="请选中一个组件" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      return <Empty className="mt-16" description="请选中一个组件" image={Empty.PRESENTED_IMAGE_SIMPLE} />
     }
     switch (type) {
       case SettingType.ATTRIBUTE:
@@ -28,17 +28,29 @@ export default function Setting() {
 
   return (
     <div className="p-2">
-      <Segmented
-        block
-        value={type}
-        onChange={setType}
-        options={[
-          { label: '属性', value: SettingType.ATTRIBUTE },
-          { label: '样式', value: SettingType.STYLE },
-          { label: '事件', value: SettingType.EVENT },
-        ]}
-      />
-      {render()}
+      <ConfigProvider
+        theme={{
+          components: {
+            Form: {
+              itemMarginBottom: 8,
+              labelFontSize: 12,
+              verticalLabelPadding: '0 0 4px',
+            },
+          },
+        }}
+      >
+        <Segmented
+          block
+          value={type}
+          onChange={setType}
+          options={[
+            { label: '属性', value: SettingType.ATTRIBUTE },
+            { label: '样式', value: SettingType.STYLE },
+            { label: '事件', value: SettingType.EVENT },
+          ]}
+        />
+        {render()}
+      </ConfigProvider>
     </div>
   )
 }

@@ -23,7 +23,9 @@ function SelectedMask({ containerClassName, portalWrapperClassName, componentId 
   const { components, currentComponentId, deleteComponent, setCurComponentId } = useComponetsStore()
 
   useEffect(() => {
-    updatePosition()
+    setTimeout(() => {
+      updatePosition()
+    }, 200)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componentId, components])
 

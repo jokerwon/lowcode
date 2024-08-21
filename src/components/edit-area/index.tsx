@@ -1,6 +1,7 @@
 import React, { MouseEvent, MouseEventHandler, useState } from 'react'
-import { Component, useComponetsStore } from '../../stores/components'
+import { useComponetsStore } from '../../stores/components'
 import { useComponentConfigStore } from '../../stores/component-config'
+import { Component } from '../../inteface'
 import HoverMask from '../hover-mask'
 import SelectedMask from '../selected-mask'
 
@@ -51,6 +52,7 @@ export default function EditArea() {
         {
           key: component.id,
           id: component.id,
+          styles: component.styles,
           ...config.defaultProps,
           ...component.props,
         },

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { ConfigProvider, Form, Input, Select } from 'antd'
+import { Form, Input, Select } from 'antd'
 import { useComponetsStore } from '../../stores/components'
 import { useComponentConfigStore } from '../../stores/component-config'
 import { ComponentConfig, ComponentSetter } from '../../inteface'
@@ -38,33 +38,21 @@ export default function Attribute() {
   }
 
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Form: {
-            itemMarginBottom: 8,
-            labelFontSize: 12,
-            verticalLabelPadding: '0 0 4px',
-          },
-        },
-      }}
-    >
-      <Form form={form} layout="vertical" variant="filled" className="mt-1 px-2" onValuesChange={handleValuesChange}>
-        <Form.Item label="ID">
-          <Input value={id} readOnly />
+    <Form form={form} layout="vertical" variant="filled" className="mt-1 px-2" onValuesChange={handleValuesChange}>
+      <Form.Item label="ID">
+        <Input value={id} readOnly />
+      </Form.Item>
+      <Form.Item label="名称">
+        <Input value={name} readOnly />
+      </Form.Item>
+      <Form.Item label="描述">
+        <Input value={desc} readOnly />
+      </Form.Item>
+      {componentConfig[currentComponent.name]?.setter?.attribute?.map((setter) => (
+        <Form.Item label={setter.label} name={setter.name} key={setter.name}>
+          {renderFormItem(setter)}
         </Form.Item>
-        <Form.Item label="名称">
-          <Input value={name} readOnly />
-        </Form.Item>
-        <Form.Item label="描述">
-          <Input value={desc} readOnly />
-        </Form.Item>
-        {componentConfig[currentComponent.name]?.setter?.attribute?.map((setter) => (
-          <Form.Item label={setter.label} name={setter.name} key={setter.name}>
-            {renderFormItem(setter)}
-          </Form.Item>
-        ))}
-      </Form>
-    </ConfigProvider>
+      ))}
+    </Form>
   )
 }

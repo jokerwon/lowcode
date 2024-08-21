@@ -4,7 +4,7 @@ import Page from '../materials/page'
 import Container from '../materials/container'
 import Button from '../materials/button'
 
-const initialComponentConfig = {
+const initialComponentConfig: { [key: string]: ComponentConfig } = {
   Page: {
     name: 'Page',
     defaultProps: {},
@@ -40,6 +40,18 @@ const initialComponentConfig = {
           name: 'text',
           label: '文本',
           type: 'input',
+        },
+      ],
+      style: [
+        {
+          name: 'width',
+          label: '宽度',
+          type: 'inputNumber',
+        },
+        {
+          name: 'height',
+          label: '高度',
+          type: 'inputNumber',
         },
       ],
     },
