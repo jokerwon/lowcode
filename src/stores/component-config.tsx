@@ -1,20 +1,22 @@
 import { create } from 'zustand'
 import { ComponentConfig } from '../inteface'
-import Page from '../materials/page'
-import Container from '../materials/container'
-import Button from '../materials/button'
+import { Page, PageDev } from '../materials/page'
+import { Container, ContainerDev } from '../materials/container'
+import { Button, ButtonDev } from '../materials/button'
 
 const initialComponentConfig: { [key: string]: ComponentConfig } = {
   Page: {
     name: 'Page',
     defaultProps: {},
-    component: Page,
+    dev: PageDev,
+    prod: Page,
     desc: '页面',
   },
   Container: {
     name: 'Container',
     defaultProps: {},
-    component: Container,
+    dev: ContainerDev,
+    prod: Container,
     desc: '容器',
   },
   Button: {
@@ -24,7 +26,8 @@ const initialComponentConfig: { [key: string]: ComponentConfig } = {
       type: 'primary',
       text: '按钮',
     },
-    component: Button,
+    dev: ButtonDev,
+    prod: Button,
     setter: {
       attribute: [
         {

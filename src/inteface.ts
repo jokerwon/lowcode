@@ -36,5 +36,6 @@ export interface ComponentConfig {
   defaultProps: Record<string, any>
   desc?: string
   setter?: { [type in SettingType]?: ComponentSetter[] }
-  component: any
+  dev: any
+  prod: any
 }

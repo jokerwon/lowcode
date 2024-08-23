@@ -1,12 +1,4 @@
-import { Button as AntdButton } from 'antd'
-import { CommonComponentProps } from '../../inteface'
+import dev from './dev'
+import prod from './prod'
 
-const Button = ({ id, type, text, styles }: CommonComponentProps) => {
-  return (
-    <AntdButton data-component-id={id} type={type} style={styles}>
-      {text}
-    </AntdButton>
-  )
-}
-
-export default Button
+export { dev as ButtonDev, prod as Button }
