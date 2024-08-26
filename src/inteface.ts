@@ -31,11 +31,17 @@ export interface ComponentSetter {
   [key: string]: any
 }
 
+export interface ComponentEvent {
+  name: string
+  label: string
+}
+
 export interface ComponentConfig {
   name: string
   defaultProps: Record<string, any>
   desc?: string
   setter?: { [type in SettingType]?: ComponentSetter[] }
+  events?: ComponentEvent[]
   dev: any
   prod: any
 }

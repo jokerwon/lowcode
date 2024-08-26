@@ -58,6 +58,16 @@ const initialComponentConfig: { [key: string]: ComponentConfig } = {
         },
       ],
     },
+    events: [
+      {
+        name: 'onClick',
+        label: '点击事件',
+      },
+      {
+        name: 'onDoubleClick',
+        label: '双击事件',
+      },
+    ],
   },
 }
 
