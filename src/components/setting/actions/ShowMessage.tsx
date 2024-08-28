@@ -1,5 +1,5 @@
 import { Input, Select } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export interface ShowMessageConfig {
   type: 'showMessage'
@@ -11,13 +11,21 @@ export interface ShowMessageConfig {
 
 export interface ShowMessageProps {
   value?: ShowMessageConfig['config']
+  defaultValue?: ShowMessageConfig['config']
   onChange?: (config: ShowMessageConfig) => void
 }
 
 export function ShowMessage(props: ShowMessageProps) {
-  const { value, onChange } = props
-  const [type, setType] = useState<'success' | 'error'>(value?.type || 'success')
-  const [text, setText] = useState<string>(value?.text || '')
+  const { value, defaultValue, onChange } = props
+  const [type, setType] = useState<'success' | 'error'>(defaultValue?.type || 'success')
+  const [text, setText] = useState<string>(defaultValue?.text || '')
+
+  useEffect(() => {
+    if (value) {
+      setType(value.type)
+      setText(value.text)
+    }
+  }, [value])
 
   function messageTypeChange(newType: 'success' | 'error') {
     setType(newType)

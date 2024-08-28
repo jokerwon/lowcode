@@ -3,8 +3,7 @@ import { message } from 'antd'
 import { useComponentConfigStore } from '../../stores/component-config'
 import { useComponetsStore } from '../../stores/components'
 import { Component } from '../../inteface'
-import { GoToLinkConfig } from '../setting/actions/GoToLink'
-import { ShowMessageConfig } from '../setting/actions/ShowMessage'
+import { ActionConfig } from '../setting/ActionModal'
 
 export function Preview() {
   const { components } = useComponetsStore()
@@ -18,7 +17,7 @@ export function Preview() {
 
       if (eventConfig) {
         props[event.name] = () => {
-          eventConfig?.actions?.forEach((action: GoToLinkConfig | ShowMessageConfig) => {
+          eventConfig?.actions?.forEach((action: ActionConfig) => {
             if (action.type === 'goToLink') {
               window.location.href = action.url
             } else if (action.type === 'showMessage') {
@@ -27,6 +26,16 @@ export function Preview() {
               } else if (action.config.type === 'error') {
                 message.error(action.config.text)
               }
+            } else if (action.type === 'customJS') {
+              // new Function 可以传入任意个参数，最后一个是函数体，前面都会作为函数参数的名字。
+              const func = new Function('context', action.code)
+              func({
+                name: component.name,
+                props: component.props,
+                showMessage(content: string) {
+                  message.success(content)
+                },
+              })
             }
           })
         }
