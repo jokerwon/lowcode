@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { message } from 'antd'
 import { useComponentConfigStore } from '../../stores/component-config'
 import { useComponetsStore } from '../../stores/components'
@@ -6,6 +6,8 @@ import { Component } from '../../inteface'
 import { ActionConfig } from '../setting/ActionModal'
 
 export function Preview() {
+  const componentRefs = useRef<Record<string, any>>({})
+
   const { components } = useComponetsStore()
   const { componentConfig } = useComponentConfigStore()
 
@@ -36,6 +38,12 @@ export function Preview() {
                   message.success(content)
                 },
               })
+            } else if (action.type === 'componentMethod') {
+              const component = componentRefs.current[action.config.componentId]
+
+              if (component) {
+                component[action.config.method]?.()
+              }
             }
           })
         }
@@ -59,6 +67,9 @@ export function Preview() {
           id: component.id,
           name: component.name,
           styles: component.styles,
+          ref: (ref: any) => {
+            componentRefs.current[component.id] = ref
+          },
           ...config.defaultProps,
           ...component.props,
           ...handleEvent(component),

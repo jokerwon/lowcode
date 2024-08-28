@@ -36,12 +36,18 @@ export interface ComponentEvent {
   label: string
 }
 
+export interface ComponentMethod {
+  name: string
+  label: string
+}
+
 export interface ComponentConfig {
   name: string
   defaultProps: Record<string, any>
   desc?: string
   setter?: { [type in SettingType]?: ComponentSetter[] }
   events?: ComponentEvent[]
+  methods?: ComponentMethod[]
   dev: any
   prod: any
 }

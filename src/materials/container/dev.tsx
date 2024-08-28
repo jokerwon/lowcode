@@ -2,7 +2,7 @@ import { CommonComponentProps } from '../../inteface'
 import { useMaterailDrop } from '../../hooks/useMaterialDrop'
 
 const Container = ({ id, children, styles }: CommonComponentProps) => {
-  const { canDrop, drop } = useMaterailDrop(['Button', 'Container'], id)
+  const { canDrop, drop } = useMaterailDrop(['Button', 'Container', 'Modal'], id)
 
   return (
     <div data-component-id={id} ref={drop} style={styles} className={`min-h-[100px] p-[20px] ${canDrop ? 'border-[2px] border-[blue]' : 'border-[1px] border-[#000]'}`}>

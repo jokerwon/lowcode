@@ -3,6 +3,7 @@ import { ComponentConfig } from '../inteface'
 import { Page, PageDev } from '../materials/page'
 import { Container, ContainerDev } from '../materials/container'
 import { Button, ButtonDev } from '../materials/button'
+import { Modal, ModalDev } from '../materials/modal'
 
 const initialComponentConfig: { [key: string]: ComponentConfig } = {
   Page: {
@@ -66,6 +67,44 @@ const initialComponentConfig: { [key: string]: ComponentConfig } = {
       {
         name: 'onDoubleClick',
         label: '双击事件',
+      },
+    ],
+  },
+  Modal: {
+    name: 'Modal',
+    defaultProps: {
+      title: '弹窗',
+    },
+    desc: '弹窗',
+    dev: ModalDev,
+    prod: Modal,
+    setter: {
+      attribute: [
+        {
+          name: 'title',
+          label: '标题',
+          type: 'input',
+        },
+      ],
+    },
+    events: [
+      {
+        name: 'onOk',
+        label: '确认事件',
+      },
+      {
+        name: 'onCancel',
+        label: '取消事件',
+      },
+    ],
+    methods: [
+      {
+        name: 'open',
+        label: '打开弹窗',
+      },
+      {
+        name: 'close',
+        label: '关闭弹窗',
       },
     ],
   },
