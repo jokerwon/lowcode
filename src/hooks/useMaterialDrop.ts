@@ -1,30 +1,44 @@
 import { useDrop } from 'react-dnd'
 import { useComponentConfigStore } from '../stores/component-config'
-import { useComponetsStore } from '../stores/components'
+import { getComponentById, useComponetsStore } from '../stores/components'
+
+export interface ItemType {
+  type: string
+  dragType?: 'move' | 'add'
+  id: number
+}
 
 export function useMaterailDrop(accept: string[], id: number) {
-  const { addComponent } = useComponetsStore()
+  const { components, addComponent, deleteComponent } = useComponetsStore()
   const { componentConfig } = useComponentConfigStore()
 
   const [{ canDrop }, drop] = useDrop(() => ({
     accept,
-    drop: (item: { type: string, desc: string }, monitor) => {
-      if (monitor.didDrop()) {
-        // 子组件处理过则跳过
+    drop: (item: ItemType, monitor) => {
+      const didDrop = monitor.didDrop()
+      if (didDrop) {
         return
       }
 
-      const props = componentConfig[item.type].defaultProps
+      if (item.dragType === 'move') {
+        const component = getComponentById(item.id, components)!
 
-      addComponent(
-        {
-          id: new Date().getTime(),
-          name: item.type,
-          desc: item.desc,
-          props,
-        },
-        id
-      )
+        deleteComponent(item.id)
+
+        addComponent(component, id)
+      } else {
+        const config = componentConfig[item.type]
+
+        addComponent(
+          {
+            id: new Date().getTime(),
+            name: item.type,
+            desc: config.desc,
+            props: config.defaultProps,
+          },
+          id
+        )
+      }
     },
     collect: (monitor) => ({
       canDrop: monitor.canDrop(),
