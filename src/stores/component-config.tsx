@@ -5,6 +5,7 @@ import { Container, ContainerDev } from '../materials/container'
 import { Button, ButtonDev } from '../materials/button'
 import { Modal, ModalDev } from '../materials/modal'
 import { Table, TableColumn, TableColumnDev, TableDev } from '../materials/table'
+import { Form, FormDev, FormItem, FormItemDev } from '../materials/form'
 
 const initialComponentConfig: { [key: string]: ComponentConfig } = {
   Page: {
@@ -163,6 +164,85 @@ const initialComponentConfig: { [key: string]: ComponentConfig } = {
     },
     dev: TableColumnDev,
     prod: TableColumn,
+  },
+  Form: {
+    name: 'Form',
+    defaultProps: {},
+    desc: '表单',
+    setter: {
+      attribute: [
+        {
+          name: 'title',
+          label: '标题',
+          type: 'input',
+        },
+      ],
+    },
+    methods: [
+      {
+        name: 'submit',
+        label: '提交',
+      },
+    ],
+    events: [
+      {
+        name: 'onFinish',
+        label: '提交事件',
+      },
+    ],
+    dev: FormDev,
+    prod: Form,
+  },
+  FormItem: {
+    name: 'FormItem',
+    desc: '表单项',
+    defaultProps: {
+      name: new Date().getTime(),
+      label: '姓名',
+      type: 'input',
+    },
+    dev: FormItemDev,
+    prod: FormItem,
+    setter: {
+      attribute: [
+        {
+          name: 'type',
+          label: '类型',
+          type: 'select',
+          options: [
+            {
+              label: '文本',
+              value: 'input',
+            },
+            {
+              label: '日期',
+              value: 'date',
+            },
+          ],
+        },
+        {
+          name: 'label',
+          label: '标题',
+          type: 'input',
+        },
+        {
+          name: 'name',
+          label: '字段',
+          type: 'input',
+        },
+        {
+          name: 'rules',
+          label: '校验',
+          type: 'select',
+          options: [
+            {
+              label: '必填',
+              value: 'required',
+            },
+          ],
+        },
+      ],
+    },
   },
 }
 

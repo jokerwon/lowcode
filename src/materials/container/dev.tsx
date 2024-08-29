@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { useDrag } from 'react-dnd'
 
 const Container = ({ id, children, styles }: CommonComponentProps) => {
-  const { canDrop, drop } = useMaterailDrop(['Button', 'Container', 'Modal', 'Table'], id)
+  const { canDrop, drop } = useMaterailDrop(['Button', 'Container', 'Modal', 'Table', 'Form'], id)
 
   const divRef = useRef<HTMLDivElement>(null)
 

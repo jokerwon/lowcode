@@ -18,7 +18,7 @@ export function Preview() {
       const eventConfig = component.props[event.name]
 
       if (eventConfig) {
-        props[event.name] = () => {
+        props[event.name] = (...args: any[]) => {
           eventConfig?.actions?.forEach((action: ActionConfig) => {
             if (action.type === 'goToLink') {
               window.location.href = action.url
@@ -30,19 +30,19 @@ export function Preview() {
               }
             } else if (action.type === 'customJS') {
               // new Function 可以传入任意个参数，最后一个是函数体，前面都会作为函数参数的名字。
-              const func = new Function('context', action.code)
+              const func = new Function('context', 'args', action.code)
               func({
                 name: component.name,
                 props: component.props,
                 showMessage(content: string) {
                   message.success(content)
                 },
-              })
+              }, args)
             } else if (action.type === 'componentMethod') {
               const component = componentRefs.current[action.config.componentId]
 
               if (component) {
-                component[action.config.method]?.()
+                component[action.config.method]?.(...args)
               }
             }
           })
