@@ -4,6 +4,7 @@ import { Page, PageDev } from '../materials/page'
 import { Container, ContainerDev } from '../materials/container'
 import { Button, ButtonDev } from '../materials/button'
 import { Modal, ModalDev } from '../materials/modal'
+import { Table, TableColumn, TableColumnDev, TableDev } from '../materials/table'
 
 const initialComponentConfig: { [key: string]: ComponentConfig } = {
   Page: {
@@ -107,6 +108,61 @@ const initialComponentConfig: { [key: string]: ComponentConfig } = {
         label: '关闭弹窗',
       },
     ],
+  },
+  Table: {
+    name: 'Table',
+    defaultProps: {},
+    desc: '表格',
+    setter: {
+      attribute: [
+        {
+          name: 'url',
+          label: 'url',
+          type: 'input',
+        },
+      ],
+    },
+    dev: TableDev,
+    prod: Table,
+  },
+  TableColumn: {
+    name: 'TableColumn',
+    desc: '表格列',
+    defaultProps: {
+      dataIndex: `col_${new Date().getTime()}`,
+      title: '列名',
+    },
+    setter: {
+      attribute: [
+        {
+          name: 'type',
+          label: '类型',
+          type: 'select',
+          options: [
+            {
+              label: '文本',
+              value: 'text',
+            },
+            {
+              label: '日期',
+              value: 'date',
+            },
+          ],
+        },
+        {
+          name: 'title',
+          label: '标题',
+          type: 'input',
+        },
+        {
+          name: 'dataIndex',
+          label: '字段',
+          type: 'input',
+        },
+      ],
+    },
+    dev: TableColumnDev,
+    prod: TableColumn,
   },
 }
 
